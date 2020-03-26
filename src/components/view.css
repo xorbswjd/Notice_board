@@ -1,0 +1,15 @@
+.table table-striped {
+    text-align: center; 
+    border: 1px solid #dddddd
+}
+.header {
+    text-align:center;
+    background-color:#eeeeee; 
+}
+.title {
+    width:20%;
+}
+.content {
+    text-align:left;
+    min-height:200px; 
+}
