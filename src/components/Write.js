@@ -1,12 +1,6 @@
 import React from 'react';
-import { createBrowserHistory } from 'history';
 import '../css/bootstrap.css';
 import './write.css'
-
-var io = require('socket.io-client');
-
-const browserHistory = createBrowserHistory();
-const socketClient = io("http://localhost:3003");
 
 class Write extends React.Component {
   constructor(props) {
@@ -18,7 +12,8 @@ class Write extends React.Component {
 	}
     this.handleBbsTitleChange = this.handleBbsTitleChange.bind(this);
     this.handleBbsContentChange = this.handleBbsContentChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+	this.handleSubmit = this.handleSubmit.bind(this);
+	this.addDate = this.addDate.bind(this);
   }
 
 handleBbsTitleChange(event) {
@@ -30,29 +25,34 @@ handleBbsContentChange(event) {
 }
 
 addDate() {
-	socketClient.on("connect", () => { 
-		console.log("connection server"); 
-	});
-	socketClient.emit("first Request", { data : 'addData' });
-	socketClient.emit("addData", { data: "1" }); 
-	socketClient.on("first Respond", req => { 
-		if(req.data === "close") {
-			socketClient.close();
+	var data = {'id' : this.state.id, 'bbsTitle' : this.state.bbsTitle, 'bbsContent' : this.state.bbsContent};
+	data = JSON.stringify(data);
+	console.log(data)
+	var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:3000/api/add_content');
+    xhr.setRequestHeader('Content-Type', "application/json");
+	xhr.send(data);
+	
+	xhr.addEventListener('load', function() {
+		var result = JSON.parse(xhr.responseText);
+		if(result.resule === "ok") {
+			document.location.href = '/'; 
+		} else {
+			alert('실패');  
 		}
-	 });
+	});
 }
 
 handleSubmit() {
 	if(this.state.bbsTitle){
 		if(this.state.bbsContent){
-			console.log(this.state)
-			//this.addDate();
+			this.addDate();
 		} else {
-			console.log('내용 입력')
+			alert('내용을 입력하세요');
 			this.contentInput.focus();
 		}
 	} else {
-		console.log('제목 입력')
+		alert('제목을 입력하세요');
 		this.titleInput.focus();
 	}
 }
@@ -64,7 +64,7 @@ componentDidMount() {
   render () {
     return (
         <div className = "container">
-		  <form onSubmit={this.handleSubmit}>
+		  <div>
             <table className = "table table-striped">
                 <thead>
 	 				<tr>
@@ -99,8 +99,8 @@ componentDidMount() {
 	 				</tr>
 	 			</tbody>
             </table>
-            <input type="submit" className="btn btn-primary pull-right" value="글쓰기" />
-		  </form>
+			<button className="btn btn-primary pull-right" onClick={this.handleSubmit}>글쓰기</button>
+		  </div>
 		</div>
     );
   }

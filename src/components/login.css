@@ -6,6 +6,20 @@
     padding-top:30px;
 }
 
-.h3 {
+h3 {
     text-align:center;
+}
+
+.upd_table {
+    text-align: center; 
+    border: 1px solid #dddddd
+}
+
+.upd_th {
+    background-color:#eeeeee;
+     text-align:center;
+}
+
+.upd_textarea {
+    height:350px;
 }

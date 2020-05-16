@@ -1,11 +1,6 @@
 import React from 'react';
-import { createBrowserHistory } from 'history';
 import '../css/bootstrap.css';
 import './login.css';
-var io = require('socket.io-client');
-
-const browserHistory = createBrowserHistory();
-const socketClient = io("http://localhost:3003");
 
 class Join extends React.Component {
     constructor(props) {
@@ -14,12 +9,7 @@ class Join extends React.Component {
             name: '',
             id: '',
             password: '',
-            passwordcheck: '',
-            user: [{
-                userID: '',
-                userPassword: '',
-                userName: ''
-            }]
+            passwordcheck: ''
         }
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -27,6 +17,7 @@ class Join extends React.Component {
         this.handlePassWordChange = this.handlePassWordChange.bind(this);
         this.handlePassWordCheckChange = this.handlePassWordCheckChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.addUser = this.addUser.bind(this);
     }
 
     handleNameChange(event) {
@@ -46,62 +37,44 @@ class Join extends React.Component {
     }
     
     addUser(name, id, password) {
+        var data = {'name' : name, 'id' : id, 'password' : password};
+        data = JSON.stringify(data);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/api/user_join');
+        xhr.setRequestHeader('Content-Type', "application/json");
+        xhr.send(data);
 
-        socketClient.on("connect", () => { 
-            console.log("connection server"); 
-        });
-        socketClient.emit("first Request", { data : 'join' });
-        socketClient.emit("join", { name, id, password }); 
-        socketClient.on("first Respond", req => { 
-            if(req.data === "close") {
-                socketClient.close();
+        xhr.addEventListener('load', function() {
+            var result = JSON.parse(xhr.responseText);
+            if(result.resule === "id_no") {
+                alert('아이디가 존재합니다');  
+            } else if(result.resule === "ok") {
+                alert('사용자 생성 완료');
+                document.location.href = '/';
             }
-         });
+        });
     }
     
     handleSubmit() {
-        var check = 0;
-        if(this.state.name) {
-            if(this.state.id){
-                if(this.state.password) {
-                    if(this.state.password === this.state.passwordcheck) {
-                        for(var i =0; i < this.state.user.length; i++) {
-                            if(this.state.id === this.state.user[i].userID) {
-                                check = 1;
-                            }
-                        }
-                        if(check === 1) {
-                            console.log('id 중복')
-                            this.idInput.focus();
-                            check = 0;
-                        } else {
-                            this.addUser(this.state.name, this.state.id, this.state.password);
-                            console.log('성공')
-                            browserHistory.push('/');
-                        }
-                    } else {
-                        console.log('passwordcheck 획인')
-                        this.passwordcheckInput.focus();
-                    }
-                }else {
-                    console.log('password 없음')
-                    this.passwordInput.focus();
-                }
-            } else {
-                console.log('id 없음')
-                this.idInput.focus();
-            }
-        } else {
-            console.log('name 없음')
+        if(!this.state.name) {
+            alert('이름을 입력해주세요');
             this.nameInput.focus();
+        } else if(!this.state.id) {
+            alert('아이디를 입력해주세요');
+            this.idInput.focus();
+        } else if(!this.state.password) {
+            alert('비밀번호를 입력해주세요');
+            this.passwordInput.focus();
+        } else if(!this.state.passwordcheck) {
+            alert('비밀번호확인을 입력해주세요');
+            this.passwordcheckInput.focus();
+        } else {
+            if(this.state.password === this.state.passwordcheck) {
+                this.addUser(this.state.name, this.state.id, this.state.password);
+            } else {
+                alert('비밀번호가 같지 않습니다');
+            }
         }
-        
-    }
-
-    componentDidMount() {
-        fetch('api/user')
-            .then(res=>res.json())
-            .then(data=>this.setState({user:data.user}));
     }
 
     render () {
@@ -109,7 +82,7 @@ class Join extends React.Component {
             <div className = "container">
                 <div className = "col-lg-4">
                     <div className ="jumbotron">
-                        <form onSubmit={this.handleSubmit}>
+                        <div>
                             <h3>회원가입 화면</h3>
                             &nbsp;
                             <div className = "form-group">
@@ -153,8 +126,8 @@ class Join extends React.Component {
                                 />
                             </div>
                             &nbsp;
-                            <input type="submit" className = "btn btn-primary form-control" value="회원가입"/>
-                        </form>
+                            <button className = "btn btn-primary form-control" onClick = {this.handleSubmit}>회원가입</button>
+                        </div>
                     </div> 
                 </div> 
             </div>

@@ -12,13 +12,13 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
-connection.query('SELECT * FROM tb_board', function (error, results) {
+connection.query('SELECT * FROM board', function (error, results) {
     if (error) {
         console.log(error);
     }
     router.get('/api', (req, res)=>res.json({board: results}));
 });
-
+/*
 connection.query('SELECT * from user', function (error, results) {
     if (error) {
         console.log(error);
@@ -27,5 +27,5 @@ connection.query('SELECT * from user', function (error, results) {
 });
 
 connection.end();
-
+*/
 module.exports = router;

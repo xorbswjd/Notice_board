@@ -6,9 +6,8 @@ class View extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          board: [
-          {
-            SEQ: null,
+          board: [{
+            seq: null,
             writer: null,
             subject: null,
             content: null,
@@ -16,19 +15,49 @@ class View extends React.Component {
             bbsAvailable: null
           }]
         };
+        this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
+    }
+
+    update() {
+        var num = window.location.href.substring(27, window.location.href.length);
+        document.location.href = '/upd_bbsID' + num;
+
+    }
+
+    delete() {
+        var num = window.location.href.substring(27, window.location.href.length);
+        var data = {'seq' : num};
+        data = JSON.stringify(data);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/api/del_content');
+        xhr.setRequestHeader('Content-Type', "application/json");
+        xhr.send(data);
+
+        xhr.addEventListener('load', function() {
+            var result = JSON.parse(xhr.responseText);
+            if(result.resule === "ok") {
+                alert('삭제되었습니다.');
+                document.location.href = '/';
+            } else {
+                alert('실패');
+            }
+        });
     }
 
     componentDidMount() {
-        fetch('/api')
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'http://localhost:3000/api/board');
+
+       fetch('/api/board')
             .then(res=>res.json())
-            .then(data=>this.setState({board:data.board}));
+            .then(data=>this.setState({board:data.row}));
     }
+
 
     render() {
         const {board} = this.state; 
-
-        var num = window.location.hash.substring(7, window.location.hash.length)-1
-
+        var num = window.location.href.substring(27, window.location.href.length)-1;
         if(board[num]){
             var date = '' + board[num].date
             return(
@@ -94,12 +123,12 @@ class View extends React.Component {
                         <a href="/" className="btn btn-primary">목록</a>
                         &nbsp;       
                         {
-                            window.sessionStorage.getItem('id') === board[window.location.hash[7]-1].writer
+                            window.sessionStorage.getItem('id') === board[num].writer
                             ?
                             <div>
-                                <button className="btn btn-primary">수정</button>
+                                <button className="btn btn-primary" onClick={this.update}>수정</button>
                                 &nbsp;
-                                <button className="btn btn-primary">삭제</button>
+                                <button className="btn btn-primary" onClick={this.delete}>삭제</button>
                             </div>
                             :
                             null

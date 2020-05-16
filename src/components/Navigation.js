@@ -22,7 +22,7 @@ class Navigation extends React.Component {
     return (
       <nav className ="navbar navbar-default">
         <div className ="navbar-header">
-          <h1 className = "navbar-brand">JSP 게시판</h1>
+          <h1 className = "navbar-brand">리액트 게시판</h1>
         </div>
         <div>
           {
