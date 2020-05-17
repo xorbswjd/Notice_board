@@ -78,7 +78,7 @@ class Container extends React.Component {
           ?
           <Link to = '/write' className = "btn btn-primary pull-right" >글쓰기</Link>
           :
-          <p></p>
+          null
         }
         </div>
       </div>

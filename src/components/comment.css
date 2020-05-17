@@ -1,0 +1,65 @@
+.Cocontainer {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+.coInput {
+    padding: 20px;
+    margin-top: 20px;
+    margin-right: 15px;
+}
+
+.id {
+    width: 100px;
+}
+
+.commentDiv {
+    border-bottom: 1px solid black;
+    padding-top: 3px;
+    padding-bottom: 5px;
+    margin-right: 15px;
+    background-color: #e9e9e9;
+}
+
+.commentId {
+    font-size: 17px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 15px;
+}
+.commentInfo {
+    display: inline;
+    font-size: 15px;
+    margin-left: 50px;
+}
+.CocoInput {
+    border-top: 1px solid black;
+    padding-top: 10px;
+    padding-left: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.CocommentDiv {
+    border-top: 1px solid black;
+    margin-top: 10px;
+}
+
+.CocommentId {
+    font-size: 17px;
+    padding-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 15px;
+}
+
+.CocommentInfo {
+    display: inline;
+    font-size: 15px;
+    margin-left: 90px;
+}
+
+.CocommentBtn {
+    width: 50px;
+}

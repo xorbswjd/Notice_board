@@ -140,3 +140,54 @@ app.post('/api/del_content', function(req, res) {
     });
 });
 
+app.get('/api/comment', function(req,res) {
+    connection.query('select * from comment', function(err,rows) {
+        if(rows){
+            var responseData = {'resule' : 'ok', 'row' : rows}
+        } else {
+            var responseData = {'resule' : 'no'}
+        }
+        res.json(responseData)
+    });
+});
+
+app.get('/api/cocomment', function(req,res) {
+    connection.query('select * from cocomment', function(err,rows) {
+        if(rows){
+            var responseData = {'resule' : 'ok', 'row' : rows}
+        } else {
+            var responseData = {'resule' : 'no'}
+        }
+        res.json(responseData)
+    });
+});
+
+app.post('/api/add_comment', function(req,res) {
+    var seq = req.body.seq;
+    var id = req.body.id;
+    var content = req.body.content;
+    var bbsSEQ = req.body.bbsSEQ;
+    connection.query('insert into comment values ("' + seq + '","' + id + '","' + content + '","' + bbsSEQ + '", "1")', function(err, rows) {
+        if(!err) {
+            var responseData = {'resule' : 'ok'};
+        } else {
+            var responseData = {'resule' : 'no'};
+        }
+        res.json(responseData)
+    });
+}); 
+
+app.post('/api/add_cocomment', function(req,res) {
+    var seq = req.body.seq;
+    var id = req.body.id;
+    var content = req.body.content;
+    var commentSEQ = req.body.commentSEQ;
+    connection.query('insert into cocomment values ("' + seq + '","' + id + '","' + content + '","' + commentSEQ + '", "1")', function(err, rows) {
+        if(!err) {
+            var responseData = {'resule' : 'ok'};
+        } else {
+            var responseData = {'resule' : 'no'};
+        }
+        res.json(responseData)
+    });
+}); 

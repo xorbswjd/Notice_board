@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/bootstrap.css';
 import './view.css';
+import Comment from './Comment';
 
 class View extends React.Component {
     constructor(props) {
@@ -120,6 +121,8 @@ class View extends React.Component {
                                 </tr>
                             </tbody>
                         </table>
+                        댓글
+                        <Comment />
                         <a href="/" className="btn btn-primary">목록</a>
                         &nbsp;       
                         {

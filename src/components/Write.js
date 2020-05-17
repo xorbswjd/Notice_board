@@ -27,7 +27,6 @@ handleBbsContentChange(event) {
 addDate() {
 	var data = {'id' : this.state.id, 'bbsTitle' : this.state.bbsTitle, 'bbsContent' : this.state.bbsContent};
 	data = JSON.stringify(data);
-	console.log(data)
 	var xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:3000/api/add_content');
     xhr.setRequestHeader('Content-Type', "application/json");
